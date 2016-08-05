@@ -1,0 +1,162 @@
+
+<form id="form" method="post">
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Formulario</h3>
+                </div>
+                <div class="panel-body">
+
+                    <div id="errors"></div>
+
+
+                    <div class="form-group">
+                        <label><?php echo $this->formLabel($form->get('date')); ?></label>
+                        <?php echo $this->formElement($form->get('date')); ?>
+                        <?php if ($this->formElementErrors($form->get('date'))): ?>
+                            <span class="help-inline">
+                                <?php echo $this->formElementErrors($form->get('date')) ?>
+                            </span>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?php echo $this->formLabel($form->get('numberOfDays')); ?></label>
+                        <?php echo $this->formElement($form->get('numberOfDays')); ?>
+                        <?php if ($this->formElementErrors($form->get('numberOfDays'))): ?>
+                            <span class="help-inline">
+                                <?php echo $this->formElementErrors($form->get('numberOfDays')) ?>
+                            </span>
+                        <?php endif; ?>
+                    </div>
+
+                    <br>
+
+                    <button id="submit" type="submit">Send</button>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Formulario</h3>
+                </div>
+                <div class="panel-body">
+                    <ul id="dates">
+
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+
+
+        var app = {
+            //
+            //
+            init: function () {
+                this.loadEvents();
+                this.loadDates();
+            },
+            //
+            //
+            loadEvents: function () {
+
+                var self = this;
+
+                $("#submit").click(function (e) {
+
+                    e.preventDefault();
+
+                    self.submitForm();
+
+                });
+
+
+            },
+            //
+            //
+            submitForm: function () {
+
+                var self = this;
+                var url = BASE_PATH + '/application/index/index';
+
+                $.ajax(url, {
+                    type: 'POST',
+                    data: $("#form").serialize(),
+                    success: function (response) {
+
+                        var result = JSON.parse(response);
+
+                        if (result.success) {
+                            self.loadDates();
+
+                        } else {
+
+                            var errors = result.errors;
+
+                            var errorContainer = $("#errors");
+                            errorContainer.empty();
+                            var divError = document.createElement('div');
+                            divError.className = 'alert alert-danger';
+
+                            for (var err in errors) {
+
+                                for (var msg in errors[err]) {
+
+                                    var errText = document.createElement('p');
+                                    errText.innerHTML = err + ': ' + errors[err][msg];
+                                    divError.appendChild(errText);
+
+                                    errorContainer.append(divError);
+                                }
+
+
+                            }
+
+
+                        }
+                    }
+                });
+
+            },
+            //
+            //
+            loadDates: function () {
+
+                var url = BASE_PATH + '/application/index/get-dates';
+
+                $.ajax(url, {
+                    type: 'get',
+                    success: function (response) {
+
+                        var dates = JSON.parse(response);
+
+                        var ul = document.getElementById('dates');
+
+                        for (var i = 0; i < dates.length; i++) {
+                            var li = document.createElement('li');
+                            li.innerHTML = 'Día Habil calculado ==> ' + dates[i];
+                            ul.appendChild(li);
+
+                        }
+
+                    }
+                });
+            }
+        };
+
+        app.init();
+
+    });
+</script>
