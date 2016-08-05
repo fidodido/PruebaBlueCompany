@@ -2,7 +2,7 @@
 <form id="form" method="post">
     <div class="row">
 
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Formulario</h3>
@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
 
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -55,6 +55,24 @@
             </div>
 
         </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Feriados</h3>
+                </div>
+                <ul>
+                    <?php foreach ($feriados as $f): ?>
+                        <li>
+                            <?php echo $f; ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
 </form>
 
 <script>
@@ -142,12 +160,14 @@
 
                         var dates = JSON.parse(response);
 
-                        var ul = document.getElementById('dates');
+                        var ul = $('#dates');
+                        ul.empty();
+                        
 
                         for (var i = 0; i < dates.length; i++) {
                             var li = document.createElement('li');
                             li.innerHTML = 'Día Habil calculado ==> ' + dates[i];
-                            ul.appendChild(li);
+                            ul.append(li);
 
                         }
 

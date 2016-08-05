@@ -14,6 +14,8 @@
 
 namespace Application\Service;
 
+use Application\Model\Date;
+
 /*
  * Peristence en session.
  */
@@ -43,7 +45,12 @@ class Persistence {
     public function getDates() {
 
         return array_reverse($this->container->dates);
+    }
 
+    public function getFeriados() {
+
+        $date = new Date();
+        return $date->getFeriados();
     }
 
 }

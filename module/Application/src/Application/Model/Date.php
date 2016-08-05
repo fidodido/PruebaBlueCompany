@@ -19,7 +19,7 @@ class Date implements \Zend\Stdlib\ArraySerializableInterface {
     private $date;
     private $days;
     // dias feriados
-    private $feriados;
+    public static $feriados;
 
     public function __construct() {
         $this->feriados = array(
@@ -42,6 +42,10 @@ class Date implements \Zend\Stdlib\ArraySerializableInterface {
 
     function setDays($days) {
         $this->days = $days;
+    }
+    
+    function getFeriados() {
+        return $this->feriados;
     }
 
     /*

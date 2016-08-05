@@ -19,6 +19,10 @@ class IndexController extends AbstractActionController {
     public function indexAction() {
 
         $form = new DaysForm();
+        $feriados = $this->getServiceLocator()
+                ->get('SessionPersistence')
+                ->getFeriados();
+
         $success = false;
         $errors = array();
 
@@ -48,12 +52,13 @@ class IndexController extends AbstractActionController {
                 'success' => $success,
                 'errors' => $errors
             )));
-            
+
             return $this->response;
         }
 
         return new ViewModel(array(
-            'form' => $form
+            'form' => $form,
+            'feriados' => $feriados
         ));
     }
 
